@@ -1,0 +1,24 @@
+.overlap-heading {
+    color: red;
+}
+.calendar-header{
+    position: relative;
+}
+.calendar-header.affix{
+    position:fixed;
+    top:0px;
+    left:81px;
+    z-index: 1000;
+}
+
+.hidden{
+    display: none;
+}
+.slot {
+    float: left;
+    padding: 9px;
+    border: 1px solid rgba(255, 152, 0, 0.87);
+    font-size: 14.3px;
+    word-wrap: break-word;
+    background: #FFEE58;
+}
