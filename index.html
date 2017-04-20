@@ -3,74 +3,105 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Framgia Hanoi Coference Room</title>
-    <script src='fullcalendar-3.1.0/lib/jquery.min.js'></script>
-    <script src='fullcalendar-3.1.0/lib/moment.min.js'></script>
-    <script src="fullcalendar-3.1.0/fullcalendar.min.js" type="text/javascript" charset="utf-8"></script>
-    <script type='text/javascript' src='fullcalendar-3.1.0/gcal.js'></script>
-    <script src='jbox/js/jBox.min.js'></script>
+    <script src='js/fullcalendar-3.1.0/lib/jquery.min.js'></script>
+    <script src='js/fullcalendar-3.1.0/lib/moment.min.js'></script>
+    <script src="js/fullcalendar-3.1.0/fullcalendar.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type='text/javascript' src='js/fullcalendar-3.1.0/gcal.js'></script>
+    <script src='js/jbox/js/jBox.min.js'></script>
     <script src="https://unpkg.com/flatpickr"></script>
-    <link rel="stylesheet" href="fullcalendar-3.1.0/fullcalendar.css">
-    <link rel="stylesheet" href="jbox/css/jBox.css">
+    <script src="js/removeDiacritics/removeDiacritics.js"></script>
+    <script src="config.js"></script>
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="js/fullcalendar-3.1.0/fullcalendar.css">
+    <link rel="stylesheet" href="js/jbox/css/jBox.css">
+    <link rel="stylesheet" href="css/booking.css">
     <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
-</head>
+
+    </head>
 <body>
-<h3>Ha Noi</h3>
-<h4 style="color:red;">Events that overlapping with others:</h4>
+<div class="container-fluid">
+    <h3>Ha Noi</h3>
 
-<!-- Write down overlapping events-->
-<div id="info">
+    <h4 class="overlap-heading">
+        Events that overlapping with others:
+    </h4>
+
+    <!-- Write down overlapping events-->
+
+    <div id="overlap-info"></div>
+
+
+    <p style="color:blue;">
+        Rooms order (from left to right): Abuja, Astana, Bàn tròn, Bangkok, Cebu, CEO Room, Dhaka, DN Office, Freespace, Jakarta, Kuala Lumpur, Other, Phnompenh, Shimane, Singapore, Tokyo, Toong, Vientiane
+    </p>
+    <p id="test"></p>
+    <!--Date picking-->
+    <strong>Pick a day: </strong> <input type="text" id="minicalendar">
+    <div class="calendar-header row hidden"></div>
+    <br>
+    <br>
+
+    <!--Print out calendar -->
+    <div id='calendar'></div>
+
+    <!--Show tooltip when hower an event-->
+    <div id="event-tooltip" style="display:none;">
+        When: <span id="event-when"></span><br>
+        <a id="event-url" href="#">Details</a>
+    </div>
+
 </div>
-<h4 style="color:blue;">
-    Rooms order (from left to right): Abuja, Astana, Bàn tròn, Bangkok, Cebu, CEO Room, Dhaka, DN Office, Freespace, Jakarta, Kuala Lumpur, Other, Phnompenh, Shimane, Singapore, Tokyo, Toong, Vientiane
-</h4>
-
-<!--Date picking-->
-<strong>Pick a day: </strong> <input type="text" id="minicalendar">
-
-<br>
-<br>
-
-<!--Print out calendar -->
-<div id='calendar'>
-
-
-</div>
-
-<!--Show tooltip when hower an event-->
-<div id="event-more-template" style="display:none;">
-  When: <span id="event-when"></span><br>
-  <a id="event-url" href="#">Details</a>
-</div>
-
 
 <script>
-    var a, v, e, clr, r;
+    var a, v, e, clr, r, stickyHeader;
 
     // initiate color, each room corresponds to a color
     colors = {
-        'Abuja': 'DARKORANGE',
-        'Astana': 'CRIMSON',
-        'Cebu': 'DARKKHAKI',
-        'Bàn tròn': 'REBECCAPURPLE',
-        'Bangkok': 'INDIANRED',
-        'CEO Room': 'MEDIUMVIOLETRED',
-        'Dhaka': 'OLIVEDRAB',
-        'Phnompenh': 'DARKRED',
-        'Shimane': 'MEDIUMAQUAMARINE',
-        'Singapore': 'STEELBLUE',
-        'Tokyo': 'ROSYBROWN',
-        'Toong': 'DARKMAGENTA',
-        'DN Office': 'INDIGO',
-        'Freespace': 'NAVY',
-        'Other': 'RED',
-        'Jakarta': 'LIMEGREEN',
-        'Kuala Lumpur': 'DARKORCHID',
-        'Vientiane': 'TEAL',
+        'Abuja': '#E53935',
+        'Astana': '#8E24AA',
+        'Bàn tròn': '#3949AB',
+        'Bangkok': '#00ACC1',
+        'Cebu': '#43A047',
+        'CEO Room': '#FFB300',
+        'Dhaka': '#F4511E',
+        'DN Office': '#E53935',
+        'Freespace': '#8E24AA',
+        'Jakarta': '#3949AB',
+        'Kuala Lumpur': '#00ACC1',
+        'Other': '#43A047',
+        'Phnompenh': '#FFB300',
+        'Shimane': '#F4511E',
+        'Singapore': '#E53935',
+        'Tokyo': '#8E24AA',
+        'Toong': '#3949AB',
+        'Vientiane': '#00ACC1',
+
+//        'Abuja': '#F44336',
+//        'Astana': '#E91E63',
+//        'Bàn tròn': '#9C27B0',
+//        'Bangkok': '#673AB7',
+//        'Cebu': '#3F51B5',
+//        'CEO Room': '#2196F3',
+//        'Dhaka': '#03A9F4',
+//        'DN Office': '#009688',
+//        'Freespace': '#4CAF50',
+//        'Jakarta': '#8BC34A',
+//        'Kuala Lumpur': '#CDDC39',
+//        'Other': '#FFEB3B',
+//        'Phnompenh': '#FF9800',
+//        'Shimane': '#FF5722',
+//        'Singapore': '#795548',
+//        'Tokyo': '#9E9E9E',
+//        'Toong': '#607D8B',
     },
     rooms = ['Abuja','Astana','Bàn tròn','Bangkok','Cebu','CEO Room','Dhaka','DN Office','Freespace','Jakarta','Kuala Lumpur','Other','Phnompenh','Shimane','Singapore','Tokyo','Toong','Vientiane'];
 
     $(document).ready(function() {
-
+        $('#test').text(rooms.length);
         // page is now ready, initialize the calendar...
         clr = $('#calendar');
         $('#calendar').fullCalendar({
@@ -84,11 +115,13 @@
             editable: false,
             nowIndicator: true,
             defaultView: 'agendaDay',
+            minTime: '06:00:00',
+            allDaySlot:false,
 
             // get events from GG API
-            googleCalendarApiKey: 'AIzaSyC94E9YH_ldRbfjiGKTkc5-7gbmNLfKzao',
+            googleCalendarApiKey: googleCalendar.API_KEY,
             events: {
-                googleCalendarId: 'a7ibdacd74oiprvqs7a7n2a1ik@group.calendar.google.com'
+                googleCalendarId: googleCalendar.Calendar_Id
             },
 
             // render events
@@ -103,8 +136,14 @@
                     bad_event = checkOverlap(event);
                     if (bad_event) {
                         time_txt = bad_event.start.format("dddd, MMMM Do, h:mm a") + " - " + bad_event.end.format("h:mm a");
-                        $("#info").append(bad_event.title + ' - ' + time_txt + '<br>');
+                        $("#overlap-info").append(bad_event.title + ' - ' + time_txt + '<br>');
                     }
+
+                    // check postion of sticky Header
+                    stickyHeader = $('#calendar').offset().top;
+                    console.log(stickyHeader);
+
+
 
                     // Differentiate past events
                     element.css('margin-right', 0);
@@ -114,14 +153,14 @@
 
                     // positioning each event
                     pos = rooms.indexOf(r);
-                    ratio = 100 / rooms.length;
+                    width = 100 / rooms.length;
 
                     // l - left magrin, r - right margin
-                    l = pos * ratio;
-                    r = 100 - l - ratio;
+                    l = pos * width;
+                    r = 100 - l - width;
                     if (r < 0) r = 0;
                     element.css('left', l + '%');
-                    element.css('right', r + '%');
+                    element.css('width', width + '%');
                 }
 
                 // Create box when hover
@@ -130,7 +169,6 @@
                         title: event.title,
                         content: initDialog(event),
                         attach: $(element),
-                        blockScroll: true,
                         closeOnMouseleave: true,
                         adjustPosition: 'flip',
                         adjustPosition: {top: 50, right: 5, bottom: 20, left: 5},
@@ -146,16 +184,40 @@
                         $('#calendar').fullCalendar('getDate').format("YYYY-MM-DD")
                     );
                 }
+                // Show header for day
+                $(window).scroll(function() {
+                    if ($(window).scrollTop() > stickyHeader + 55 && view.type == "agendaDay") {
+                        $('.calendar-header').addClass('affix show');
+                        $('.calendar-header').removeClass('hidden');
+                    }
+                    else {
+                        $('.calendar-header').removeClass('show affix');
+                        $('.calendar-header').addClass('hidden');
+                    }
+                });
+
+
             },
 
             viewRender: function(view, element) {
-                $("#info").html("");
+                $("#overlap-info").html("");
             },
         });
 
+        // print header
+        var headerText = "";
+        for (i=0; i< rooms.length; i++){
+            var leftOffset = 4.5;
+            var width = (100-leftOffset)/rooms.length;
+            l = width * i;
+            r = width * (i+1);
+            headerText += "<div class='slot' style='width: " + width + "%'>"+rooms[i]+ " </div>";
+        }
+        $('.calendar-header').append(headerText);
+
         // refetch events after a minute
         setInterval(function(){
-            $("#info").html("");
+            $("#overlap-info").html("");
             clr.fullCalendar('refetchEvents')
         }, 60000);
 
@@ -178,6 +240,12 @@
             var start = new Date(event.start);
             var end = new Date(event.end);
 
+            // Check if event is booked in Ban tron, rooms[2]
+            title = removeDiacritics(event.title.toLowerCase());
+            if (title.indexOf("ban tron") != -1) {
+                return false;
+            }
+
             var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
                 if( ev == event)
                     return false;
@@ -194,7 +262,7 @@
 
         function initDialog(event){
             time_txt = event.start.format("dddd, MMMM Do, h:mm a") + " - " + event.end.format("h:mm a");
-            tpl = $("#event-more-template");
+            tpl = $("#event-tooltip");
             tpl.find("#event-when").html(time_txt);
             tpl.find("#event-url").attr('href', event.url);
             return tpl.html();
@@ -205,7 +273,9 @@
                 $('#calendar').fullCalendar('gotoDate', new Date(dateStr));
             }
         });
+
     });
+
 </script>
 <hr>
 
