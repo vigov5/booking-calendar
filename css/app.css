@@ -1,0 +1,54 @@
+#logo{
+    margin: 15px 0 15px 0;
+    float: right;
+}
+
+.slot {
+    float: left;
+    padding: 9px;
+    border: 1px solid rgba(255, 152, 0, 0.87);
+    font-size: 14.3px;
+    word-wrap: break-word;
+    background: #FFEE58;
+}
+
+/*Override full-calendar*/
+.fc-day-grid .fc-content-skeleton td:last-child{
+    width: 0px;
+}
+
+.fc-day-grid .fc-content-skeleton td{
+    word-wrap: break-word;
+    font-size: 12px;
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+}
+
+.fc-left{
+    visibility: hidden;
+}
+.pick-date{
+    position: relative;
+    top: 75px;
+}
+.pick-date label {
+    font-weight: bold;
+}
+
+
+/*Override blog-theme*/
+.blog-masthead{
+    background: rgb(32, 36, 39);
+}
+.blog-nav h2{
+    color: white;
+    margin-top:10px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.blog-nav h2 i {
+    color: #ff9800;
+}
+.blog-post h4{
+    font-weight: bold;
+}

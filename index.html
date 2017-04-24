@@ -1,219 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Framgia Hanoi Coference Room</title>
-    <script src="init.js"></script>
-    <script src='js/fullcalendar-3.1.0/lib/jquery.min.js'></script>
-    <script src='js/fullcalendar-3.1.0/lib/moment.min.js'></script>
-    <script src="js/fullcalendar-3.1.0/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
-    <script type='text/javascript' src='js/fullcalendar-3.1.0/gcal.js'></script>
-    <script src='js/jbox/js/jBox.min.js'></script>
+    <script src="js/init.js"></script>
+    <script src='lib/fullcalendar-3.1.0/lib/jquery.min.js'></script>
+    <script src='lib/fullcalendar-3.1.0/lib/moment.min.js'></script>
+    <script src="lib/fullcalendar-3.1.0/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
+    <script type='text/javascript' src='lib/fullcalendar-3.1.0/gcal.js'></script>
+    <script src='lib/jbox/js/jBox.min.js'></script>
     <script src="https://unpkg.com/flatpickr"></script>
-    <script src="js/removeDiacritics/removeDiacritics.js"></script>
-    <script src="config.js"></script>
+    <script src="lib/removeDiacritics/removeDiacritics.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
 
     <!--Bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="js/fullcalendar-3.1.0/fullcalendar.css">
-    <link rel="stylesheet" href="js/jbox/css/jBox.css">
-    <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="lib/jbox/css/jBox.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <link rel="stylesheet" href="lib/fullcalendar-3.1.0/fullcalendar.css">
+    <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
 
-    </head>
+</head>
 <body>
-<div class="container-fluid">
-    <h3>Ha Noi</h3>
 
-    <h4 class="overlap-heading">
-        Events that overlapping with others:
-    </h4>
+<div class="blog-masthead">
 
-    <!-- Write down overlapping events-->
-
-    <div id="overlap-info"></div>
-
-
-    <p style="color:blue;">
-        Rooms order (from left to right): Abuja, Astana, Bàn tròn, Bangkok, Cebu, CEO Room, Dhaka, DN Office, Freespace, Jakarta, Kuala Lumpur, Other, Phnompenh, Shimane, Singapore, Tokyo, Toong, Vientiane
-    </p>
-    <!--Date picking-->
-    <strong>Pick a day: </strong> <input type="text" id="minicalendar">
-    <div class="calendar-header row hidden"></div>
-    <br>
-    <br>
-
-    <!--Print out calendar -->
-    <div id='calendar'></div>
-
-    <!--Show tooltip when hower an event-->
-    <div id="event-tooltip" style="display:none;">
-        When: <span id="event-when"></span><br>
-        <a id="event-url" href="#">Details</a>
+    <div class="container" style="overflow: hidden">
+        <img src="framgia-logo.png" id="logo">
+        <nav class="nav blog-nav">
+            <h2><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;Conference Schedule - HN</h2>
+        </nav>
     </div>
-
 </div>
 
-<script>
-    var a, v, e, clr, r, stickyHeader;
+<div class="container-fluid">
 
+    <div class="row">
 
+        <div class="col-sm-12 blog-main">
 
-    $(document).ready(function() {
-        // page is now ready, initialize the calendar...
-        clr = $('#calendar');
-        $('#calendar').fullCalendar({
-            // put your options and callbacks here
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            selectable: false,
-            editable: false,
-            nowIndicator: true,
-            defaultView: 'agendaDay',
-            minTime: '06:00:00',
-            allDaySlot:true,
-            allDayText:'Room',
+            <div class="blog-post">
+                <div class="container">
+                    <h4>Overlapped Events</h4>
 
-            // get events from GG API
-            googleCalendarApiKey: googleCalendar.API_KEY,
-            events: {
-                googleCalendarId: googleCalendar.Calendar_Id
-            },
+                    <!-- Write down overlapping events-->
+                    <div id="overlap-info"></div>
+                </div>
 
-            // render events
-            eventAfterRender: function(event, element, view) {
-                e = event;
-                r = getRoomName(event);
-                element.css('background-color', colors[r]);
-                element.css('border-color', colors[r]);
-                if (view.type != "month" && event.start.hasTime()) {
+                <div class="form-group row pick-date">
+                    <label for="minicalendar" class="col-1 col-form-label">Date: </label>
+                    <div class="col-3">
+                        <input class="form-control" type="text" id="minicalendar">
+                    </div>
+                </div>
+                <hr>
 
-                    // Show bad events
-                    bad_event = checkOverlap(event);
-                    if (bad_event) {
-                        time_txt = bad_event.start.format("dddd, MMMM Do, h:mm a") + " - " + bad_event.end.format("h:mm a");
-                        $("#overlap-info").append(bad_event.title + ' - ' + time_txt + '<br>');
-                    }
+                <!--Print out calendar -->
+                <div id='calendar'></div>
 
-                    // Differentiate past events
-                    element.css('margin-right', 0);
-                    if (event.end < Date.now()) {
-                        element.css('opacity', 0.5);
-                    }
+                <!--Show tooltip when hower an event-->
+                <div id="event-tooltip" style="display:none;">
+                    When: <span id="event-when"></span><br>
+                    <a id="event-url" href="#">Details</a>
+                </div>
+            </div>
+        </div><!-- /.blog-main -->
 
-                    // positioning each event
-                    pos = rooms.indexOf(r);
-                    width = 100 / rooms.length;
+    </div><!-- /.row -->
 
-                    // l - left magrin, r - right margin
-                    l = pos * width;
-                    element.css('left', l + '%');
-                    element.css('width', width + '%');
-                }
-
-                // Create box when hover
-                if (!event.tip) {
-                    event.tip = new jBox('Tooltip', {
-                        title: event.title,
-                        content: initDialog(event),
-                        attach: $(element),
-                        closeOnMouseleave: true,
-                        adjustPosition: 'flip',
-                        adjustPosition: {top: 50, right: 5, bottom: 20, left: 5},
-                        repositionOnOpen: true,
-                    });
-                }
-            },
-
-            eventAfterAllRender: function (){
-                var view = $('#calendar').fullCalendar('getView');
-                if (view.type == "agendaDay") {
-                    mini.setDate(
-                        $('#calendar').fullCalendar('getDate').format("YYYY-MM-DD")
-                    );
-                }
-            },
-
-            viewRender: function(view, element) {
-                $("#overlap-info").html("");
-            },
-        });
-
-        // remove the last td, inserted by full calendar js in the header
-        $('.fc-day-grid .fc-content-skeleton td').css('background','red');
-
-        // refetch events after a minute
-//        setInterval(function(){
-//            $("#overlap-info").html("");
-//            clr.fullCalendar('refetchEvents')
-//        }, 60000);
-
-
-        function getRoomName(event){
-            for (var i = rooms.length - 1; i >= 0; i--) {
-                title = event.title.toLowerCase();
-                if (title.indexOf(rooms[i].toLowerCase()) != -1) {
-                    event.room = rooms[i];
-                    return rooms[i];
-                }
-            }
-
-            event.room = "Other";
-            return "Other";
-        }
-
-        function checkOverlap(event) {
-
-            var start = new Date(event.start);
-            var end = new Date(event.end);
-
-            // Check if event is booked in Ban tron, rooms[2]
-            title = removeDiacritics(event.title.toLowerCase());
-            if (title.indexOf("ban tron") != -1) {
-                return false;
-            }
-
-            var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
-                if( ev == event)
-                    return false;
-                var estart = new Date(ev.start);
-                var eend = new Date(ev.end);
-
-                return (Math.round(estart)/1000 < Math.round(end)/1000 && Math.round(eend) > Math.round(start) && ev.room == event.room);
-            });
-
-            if (overlap.length){
-                return event;
-            }
-        }
-
-        function initDialog(event){
-            time_txt = event.start.format("dddd, MMMM Do, h:mm a") + " - " + event.end.format("h:mm a");
-            tpl = $("#event-tooltip");
-            tpl.find("#event-when").html(time_txt);
-            tpl.find("#event-url").attr('href', event.url);
-            return tpl.html();
-        }
-
-        mini = $("#minicalendar").flatpickr({
-            onChange: function(selectedDates, dateStr, instance) {
-                $('#calendar').fullCalendar('gotoDate', new Date(dateStr));
-            }
-        });
-
-    });
-
-</script>
-<hr>
+</div><!-- /.container -->
 
 <!-- Footer -->
-<footer>
-© Framgia Vietnam 2017 - by vigov5 & tung6192
+<footer class="blog-footer">
+    © Framgia Vietnam 2017 - by vigov5 & tung6192
 </footer>
+
+
 </body>
 </html>
