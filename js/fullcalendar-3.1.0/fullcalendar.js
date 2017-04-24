@@ -13834,7 +13834,14 @@ var agendaDayGridMethods = {
 	renderIntroHtml: function() {
 		var view = this.view;
 
-		return '<td class="fc-axis" ' + view.axisStyleAttr() + '></td>';
+		var header = '<td class="fc-axis" ' + view.axisStyleAttr() + '></td>';
+		for (i=0; i < rooms.length; i++){
+			var width = (100 - view.axisWidth)/rooms.length;
+			var position = width * i;
+            header += '<td style="left:' + position + '%;">'+ rooms[i] +'</td>';
+		}
+
+		return header;
 	}
 
 };

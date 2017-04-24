@@ -1,19 +1,7 @@
 .overlap-heading {
     color: red;
 }
-.calendar-header{
-    position: relative;
-}
-.calendar-header.affix{
-    position:fixed;
-    top:0px;
-    left:81px;
-    z-index: 1000;
-}
 
-.hidden{
-    display: none;
-}
 .slot {
     float: left;
     padding: 9px;
@@ -21,4 +9,16 @@
     font-size: 14.3px;
     word-wrap: break-word;
     background: #FFEE58;
+}
+
+.fc-day-grid .fc-content-skeleton td:last-child{
+    width: 0px;
+}
+
+.fc-day-grid .fc-content-skeleton td{
+    word-wrap: break-word;
+    font-size: 14px;
+    text-align: center;
+    padding-top: 5px;
+    color: red;
 }

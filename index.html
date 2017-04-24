@@ -3,9 +3,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Framgia Hanoi Coference Room</title>
+    <script src="init.js"></script>
     <script src='js/fullcalendar-3.1.0/lib/jquery.min.js'></script>
     <script src='js/fullcalendar-3.1.0/lib/moment.min.js'></script>
-    <script src="js/fullcalendar-3.1.0/fullcalendar.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/fullcalendar-3.1.0/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
     <script type='text/javascript' src='js/fullcalendar-3.1.0/gcal.js'></script>
     <script src='js/jbox/js/jBox.min.js'></script>
     <script src="https://unpkg.com/flatpickr"></script>
@@ -58,28 +59,7 @@
 <script>
     var a, v, e, clr, r, stickyHeader;
 
-    // initiate color, each room corresponds to a color
-    colors = {
-        'Abuja': '#E53935',
-        'Astana': '#8E24AA',
-        'Bàn tròn': '#3949AB',
-        'Bangkok': '#00ACC1',
-        'Cebu': '#43A047',
-        'CEO Room': '#FFB300',
-        'Dhaka': '#F4511E',
-        'DN Office': '#E53935',
-        'Freespace': '#8E24AA',
-        'Jakarta': '#3949AB',
-        'Kuala Lumpur': '#00ACC1',
-        'Other': '#43A047',
-        'Phnompenh': '#FFB300',
-        'Shimane': '#F4511E',
-        'Singapore': '#E53935',
-        'Tokyo': '#8E24AA',
-        'Toong': '#3949AB',
-        'Vientiane': '#00ACC1',
-    },
-    rooms = ['Abuja','Astana','Bàn tròn','Bangkok','Cebu','CEO Room','Dhaka','DN Office','Freespace','Jakarta','Kuala Lumpur','Other','Phnompenh','Shimane','Singapore','Tokyo','Toong','Vientiane'];
+
 
     $(document).ready(function() {
         // page is now ready, initialize the calendar...
@@ -96,7 +76,8 @@
             nowIndicator: true,
             defaultView: 'agendaDay',
             minTime: '06:00:00',
-            allDaySlot:false,
+            allDaySlot:true,
+            allDayText:'Room',
 
             // get events from GG API
             googleCalendarApiKey: googleCalendar.API_KEY,
@@ -119,12 +100,6 @@
                         $("#overlap-info").append(bad_event.title + ' - ' + time_txt + '<br>');
                     }
 
-                    // check postion of sticky Header
-                    stickyHeader = $('#calendar').offset().top;
-                    console.log(stickyHeader);
-
-
-
                     // Differentiate past events
                     element.css('margin-right', 0);
                     if (event.end < Date.now()) {
@@ -137,8 +112,6 @@
 
                     // l - left magrin, r - right margin
                     l = pos * width;
-                    r = 100 - l - width;
-                    if (r < 0) r = 0;
                     element.css('left', l + '%');
                     element.css('width', width + '%');
                 }
@@ -164,19 +137,6 @@
                         $('#calendar').fullCalendar('getDate').format("YYYY-MM-DD")
                     );
                 }
-                // Show header for day
-                $(window).scroll(function() {
-                    if ($(window).scrollTop() > stickyHeader + 55 && view.type == "agendaDay") {
-                        $('.calendar-header').addClass('affix show');
-                        $('.calendar-header').removeClass('hidden');
-                    }
-                    else {
-                        $('.calendar-header').removeClass('show affix');
-                        $('.calendar-header').addClass('hidden');
-                    }
-                });
-
-
             },
 
             viewRender: function(view, element) {
@@ -184,22 +144,14 @@
             },
         });
 
-        // print header
-        var headerText = "";
-        for (i=0; i< rooms.length; i++){
-            var leftOffset = 4.5;
-            var width = (100-leftOffset)/rooms.length;
-            l = width * i;
-            r = width * (i+1);
-            headerText += "<div class='slot' style='width: " + width + "%'>"+rooms[i]+ " </div>";
-        }
-        $('.calendar-header').append(headerText);
+        // remove the last td, inserted by full calendar js in the header
+        $('.fc-day-grid .fc-content-skeleton td').css('background','red');
 
         // refetch events after a minute
-        setInterval(function(){
-            $("#overlap-info").html("");
-            clr.fullCalendar('refetchEvents')
-        }, 60000);
+//        setInterval(function(){
+//            $("#overlap-info").html("");
+//            clr.fullCalendar('refetchEvents')
+//        }, 60000);
 
 
         function getRoomName(event){
