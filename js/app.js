@@ -92,15 +92,13 @@ $(document).ready(function() {
                     $('#calendar').fullCalendar('getDate').format("YYYY-MM-DD")
                 );
             }
+
         },
 
         viewRender: function(view, element) {
             $("#overlap-info").html("");
         },
     });
-
-    // remove the last td, inserted by full calendar js in the header
-    $('.fc-day-grid .fc-content-skeleton td').css('background','red');
 
     // refetch events after a minute
     setInterval(function(){
@@ -177,5 +175,17 @@ $(document).ready(function() {
             $('#calendar').fullCalendar('gotoDate', new Date(dateStr));
         }
     });
+
+    $(window).scroll(function(){
+        var pos = $('#calendar').offset().top,
+            scroll = $(window).scrollTop();
+        if (scroll >= pos + 100) {
+            $('#room-title').show();
+        }
+        else {
+            $('#room-title').hide();
+        }
+
+    })
 
 });

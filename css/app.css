@@ -12,6 +12,13 @@
     background: #FFEE58;
 }
 
+#room-title{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+    display: none;
+}
 /*Override full-calendar*/
 .fc-day-grid .fc-content-skeleton td:last-child{
     width: 0px;
@@ -23,6 +30,7 @@
     text-align: center;
     padding-top: 20px;
     font-weight: bold;
+
 }
 
 .fc-left{
@@ -36,7 +44,9 @@
     font-weight: bold;
 }
 
-
+.fc-day{
+    background: #fcf8e3;
+}
 /*Override blog-theme*/
 .blog-masthead{
     background: rgb(32, 36, 39);
