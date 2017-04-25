@@ -3,6 +3,20 @@
  */
 var a, v, e, clr, r, stickyHeader;
 
+// Approximate matching options
+var options = {
+    include: ["score"],
+    shouldSort: true,
+    threshold: 0.3,
+    location: 0,
+    distance: 50,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: [
+        "title"
+    ]
+};
+
 $(document).ready(function() {
     // page is now ready, initialize the calendar...
     clr = $('#calendar');
@@ -98,8 +112,21 @@ $(document).ready(function() {
     function getRoomName(event){
         for (var i = rooms.length - 1; i >= 0; i--) {
             if (event.title != null){
-                title = event.title.toLowerCase();
+                title = removeDiacritics(event.title.toLowerCase());
                 if (title.indexOf(rooms[i].toLowerCase()) != -1) {
+                    event.room = rooms[i];
+                    return rooms[i];
+                }
+            }
+        }
+
+        for (var i = rooms.length - 1; i >= 0; i--) {
+            if (event.title != null){
+                title = removeDiacritics(event.title.toLowerCase());
+                var list = [{"title": title}];
+                var fuse = new Fuse(list, options);
+                var result = fuse.search(rooms[i]);
+                if (result.length>0) {
                     event.room = rooms[i];
                     return rooms[i];
                 }

@@ -5,7 +5,7 @@
 var colors = {
         'Abuja': '#E53935',
         'Astana': '#8E24AA',
-        'Bàn tròn': '#3949AB',
+        'Ban tron': '#3949AB',
         'Bangkok': '#00ACC1',
         'Cebu': '#43A047',
         'CEO Room': '#FFB300',
@@ -22,5 +22,5 @@ var colors = {
         'Toong': '#3949AB',
         'Vientiane': '#00ACC1',
     },
-    rooms = ['Abuja', 'Astana', 'Bàn tròn', 'Bangkok', 'Cebu', 'CEO Room', 'Dhaka', 'DN Office', 'Freespace', 'Jakarta', 'Kuala Lumpur'
+    rooms = ['Abuja', 'Astana', 'Ban tron', 'Bangkok', 'Cebu', 'CEO Room', 'Dhaka', 'DN Office', 'Freespace', 'Jakarta', 'Kuala Lumpur'
         ,'Phnompenh', 'Shimane', 'Singapore', 'Tokyo', 'Toong', 'Vientiane','Other'];
