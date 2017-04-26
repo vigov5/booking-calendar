@@ -17,7 +17,13 @@ var options = {
     ]
 };
 
-$(document).ready(function() {
+$(document).ready(function () {
+    // create the row title
+    for (i = 0; i < rooms.length; i++) {
+        $('#row-content').append('<td>' + rooms[i] + '</td>');
+    }
+    $('#row-content').append('<td></td>');
+
     // page is now ready, initialize the calendar...
     clr = $('#calendar');
     $('#calendar').fullCalendar({
@@ -31,8 +37,8 @@ $(document).ready(function() {
         nowIndicator: true,
         defaultView: 'agendaDay',
         minTime: '06:00:00',
-        allDaySlot:true,
-        allDayText:'Room',
+        allDaySlot: true,
+        allDayText: 'Room',
 
         // get events from GG API
         googleCalendarApiKey: googleCalendar.API_KEY,
@@ -41,7 +47,7 @@ $(document).ready(function() {
         },
 
         // render events
-        eventAfterRender: function(event, element, view) {
+        eventAfterRender: function (event, element, view) {
             e = event;
             r = getRoomName(event);
             element.css('background-color', colors[r]);
@@ -85,7 +91,7 @@ $(document).ready(function() {
             }
         },
 
-        eventAfterAllRender: function (){
+        eventAfterAllRender: function () {
             var view = $('#calendar').fullCalendar('getView');
             if (view.type == "agendaDay") {
                 mini.setDate(
@@ -95,21 +101,21 @@ $(document).ready(function() {
 
         },
 
-        viewRender: function(view, element) {
+        viewRender: function (view, element) {
             $("#overlap-info").html("");
         },
     });
 
     // refetch events after a minute
-    setInterval(function(){
+    setInterval(function () {
         $("#overlap-info").html("");
         clr.fullCalendar('refetchEvents')
     }, 60000);
 
 
-    function getRoomName(event){
+    function getRoomName(event) {
         for (var i = rooms.length - 1; i >= 0; i--) {
-            if (event.title != null){
+            if (event.title != null) {
                 title = removeDiacritics(event.title.toLowerCase());
                 if (title.indexOf(rooms[i].toLowerCase()) != -1) {
                     event.room = rooms[i];
@@ -119,12 +125,12 @@ $(document).ready(function() {
         }
 
         for (var i = rooms.length - 1; i >= 0; i--) {
-            if (event.title != null){
+            if (event.title != null) {
                 title = removeDiacritics(event.title.toLowerCase());
                 var list = [{"title": title}];
                 var fuse = new Fuse(list, options);
                 var result = fuse.search(rooms[i]);
-                if (result.length>0) {
+                if (result.length > 0) {
                     event.room = rooms[i];
                     return rooms[i];
                 }
@@ -141,28 +147,28 @@ $(document).ready(function() {
         var end = new Date(event.end);
 
         // Check if event is booked in Ban tron, rooms[2]
-        if (event.title != null){
+        if (event.title != null) {
             title = removeDiacritics(event.title.toLowerCase());
         }
         if (title.indexOf("ban tron") != -1) {
             return false;
         }
 
-        var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
-            if( ev == event)
+        var overlap = $('#calendar').fullCalendar('clientEvents', function (ev) {
+            if (ev == event)
                 return false;
             var estart = new Date(ev.start);
             var eend = new Date(ev.end);
 
-            return (Math.round(estart)/1000 < Math.round(end)/1000 && Math.round(eend) > Math.round(start) && ev.room == event.room);
+            return (Math.round(estart) / 1000 < Math.round(end) / 1000 && Math.round(eend) > Math.round(start) && ev.room == event.room);
         });
 
-        if (overlap.length){
+        if (overlap.length) {
             return event;
         }
     }
 
-    function initDialog(event){
+    function initDialog(event) {
         time_txt = event.start.format("h:mm a") + " - " + event.end.format("h:mm a");
         tpl = $("#event-tooltip");
         tpl.find("#event-when").html(time_txt);
@@ -171,12 +177,12 @@ $(document).ready(function() {
     }
 
     mini = $("#minicalendar").flatpickr({
-        onChange: function(selectedDates, dateStr, instance) {
+        onChange: function (selectedDates, dateStr, instance) {
             $('#calendar').fullCalendar('gotoDate', new Date(dateStr));
         }
     });
 
-    $(window).scroll(function(){
+    $(window).scroll(function () {
         var pos = $('#calendar').offset().top,
             scroll = $(window).scrollTop();
         if (scroll >= pos + 100) {
