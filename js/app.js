@@ -50,6 +50,7 @@ $(document).ready(function () {
         eventAfterRender: function (event, element, view) {
             e = event;
             r = getRoomName(event);
+            event.end = !event.end ? event.start : event.end;
             element.css('background-color', colors[r]);
             element.css('border-color', colors[r]);
             if (view.type != "month" && event.start.hasTime()) {
