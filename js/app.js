@@ -17,7 +17,13 @@ var options = {
     ]
 };
 
-$(document).ready(function () {
+$(document).ready(function() {
+    mini = $("#minicalendar").flatpickr({
+        onChange: function(selectedDates, dateStr, instance) {
+            $('#calendar').fullCalendar('gotoDate', new Date(dateStr));
+        }
+    });
+
     // create the row title
     for (i = 0; i < rooms.length; i++) {
         $('#row-content').append('<td>' + rooms[i] + '</td>');
@@ -26,28 +32,21 @@ $(document).ready(function () {
 
     // page is now ready, initialize the calendar...
     clr = $('#calendar');
-    $('#calendar').fullCalendar({
+    var options = {
         // put your options and callbacks here
         header: {
             right: 'prev,next today',
             center: 'title'
         },
-        selectable: false,
-        editable: false,
+        selectable: true,
+        editable: true,
+        selectHelper: true,
         nowIndicator: true,
         defaultView: 'agendaDay',
         minTime: '06:00:00',
         allDaySlot: true,
         allDayText: 'Room',
-
-        // get events from GG API
-        googleCalendarApiKey: googleCalendar.API_KEY,
-        events: {
-            googleCalendarId: googleCalendar.Calendar_Id
-        },
-
-        // render events
-        eventAfterRender: function (event, element, view) {
+        eventAfterRender: function(event, element, view) {
             e = event;
             r = getRoomName(event);
             element.css('background-color', colors[r]);
@@ -85,29 +84,66 @@ $(document).ready(function () {
                     attach: $(element),
                     closeOnMouseleave: true,
                     adjustPosition: 'flip',
-                    adjustPosition: {top: 50, right: 5, bottom: 20, left: 5},
+                    adjustPosition: { top: 50, right: 5, bottom: 20, left: 5 },
                     repositionOnOpen: true,
                 });
             }
         },
 
-        eventAfterAllRender: function () {
+        eventAfterAllRender: function() {
             var view = $('#calendar').fullCalendar('getView');
             if (view.type == "agendaDay") {
                 mini.setDate(
                     $('#calendar').fullCalendar('getDate').format("YYYY-MM-DD")
                 );
             }
-
         },
 
-        viewRender: function (view, element) {
+        viewRender: function(view, element) {
             $("#overlap-info").html("");
         },
-    });
+
+        eventDrop: function(event, delta, revertFunc) {
+            // TODO edit only in agendaDay view
+            alert(event.title + " was dropped on " + event.start.format());
+            console.log(event.start)
+            if (!confirm("Are you sure about this change?")) {
+                revertFunc();
+            }
+        },
+
+        eventResize: function(event, delta, revertFunc) {
+            alert(event.title + " end is now " + event.end.format());
+            if (!confirm("is this okay?")) {
+                revertFunc();
+            }
+        },
+
+        select: function(start, end, jsEvent, view) {
+            e = jsEvent;
+            pos = Math.floor(jsEvent.offsetX * rooms.length / $("." + view.widgetContentClass).width());
+            var title = prompt('Event Title:');
+            if (title) {
+              clr.fullCalendar('refetchEvents');
+            }
+            $('#calendar').fullCalendar('unselect');
+        },
+    };
+    if (googleCalendar.role == "reader" || googleCalendar.role == "anonymous") {
+        options.selectable = false;
+        options.editable = false;
+        options.googleCalendarApiKey = googleCalendar.API_KEY;
+        options.events = {
+            googleCalendarId: googleCalendar.Calendar_Id
+        };
+    } else {
+        options.events = listUpcomingEvents;
+    }
+
+    $('#calendar').fullCalendar(options);
 
     // refetch events after a minute
-    setInterval(function () {
+    setInterval(function() {
         $("#overlap-info").html("");
         clr.fullCalendar('refetchEvents')
     }, 60000);
@@ -127,7 +163,7 @@ $(document).ready(function () {
         for (var i = rooms.length - 1; i >= 0; i--) {
             if (event.title != null) {
                 title = removeDiacritics(event.title.toLowerCase());
-                var list = [{"title": title}];
+                var list = [{ "title": title }];
                 var fuse = new Fuse(list, options);
                 var result = fuse.search(rooms[i]);
                 if (result.length > 0) {
@@ -154,7 +190,7 @@ $(document).ready(function () {
             return false;
         }
 
-        var overlap = $('#calendar').fullCalendar('clientEvents', function (ev) {
+        var overlap = $('#calendar').fullCalendar('clientEvents', function(ev) {
             if (ev == event)
                 return false;
             var estart = new Date(ev.start);
@@ -176,19 +212,12 @@ $(document).ready(function () {
         return tpl.html();
     }
 
-    mini = $("#minicalendar").flatpickr({
-        onChange: function (selectedDates, dateStr, instance) {
-            $('#calendar').fullCalendar('gotoDate', new Date(dateStr));
-        }
-    });
-
-    $(window).scroll(function () {
+    $(window).scroll(function() {
         var pos = $('#calendar').offset().top,
             scroll = $(window).scrollTop();
         if (scroll >= pos + 100) {
             $('#room-title').show();
-        }
-        else {
+        } else {
             $('#room-title').hide();
         }
 
